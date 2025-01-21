@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 
 import "./globals.css";
-import { Header } from "@/components/molecules/Header/Header";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,11 +16,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`antialiased`}>
-          <Header />
-
-          {children}
-        </body>
+        <body className={`antialiased min-h-screen flex`}>{children}</body>
       </html>
     </ClerkProvider>
   );
