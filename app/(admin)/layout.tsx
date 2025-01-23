@@ -1,4 +1,5 @@
 import { Header } from "@/components/molecules/Header/Header";
+import { Sidebar } from "@/components/molecules/Sidebar/Sidebar";
 
 export default function Layout({
   children,
@@ -10,7 +11,8 @@ export default function Layout({
       <Header />
 
       <div className="flex flex-1 flex-col lg:flex-row bg-gray-100">
-        {/* Sidebar */}
+        <Sidebar />
+
         <div className="flex flex-1 justify-center lg:justify-start items-start max-w-5xl mx-auto w-full">
           {children}
         </div>
