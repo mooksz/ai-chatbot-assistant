@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 
 import "./globals.css";
+import { ApolloProvider } from "@/providers/ApolloProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,10 +15,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={`antialiased min-h-screen flex`}>{children}</body>
-      </html>
-    </ClerkProvider>
+    <ApolloProvider>
+      <ClerkProvider>
+        <html lang="en">
+          <body className={`antialiased min-h-screen flex`}>{children}</body>
+        </html>
+      </ClerkProvider>
+    </ApolloProvider>
   );
 }
