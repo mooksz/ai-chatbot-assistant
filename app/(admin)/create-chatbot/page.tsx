@@ -7,7 +7,7 @@ import { CREATE_CHATBOT } from "@/graphql/mutations";
 import { useMutation } from "@apollo/client";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import React, { FormEvent, useState, useTransition } from "react";
+import { type FormEvent, useState } from "react";
 
 export default function Page() {
   const { user } = useUser();
