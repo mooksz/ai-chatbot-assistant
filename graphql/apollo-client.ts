@@ -5,13 +5,12 @@ import {
   createHttpLink,
 } from "@apollo/client";
 
-export const APOLLO_CLIENT_BASE_URL =
-  process.env.NODE_ENV !== "development"
-    ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-    : "http://localhost:3000";
+if (!process.env.NEXT_PUBLIC_BASE_URL) {
+  throw new Error("NEXT_PUBLIC_BASE_URL is undefined");
+}
 
 const link = createHttpLink({
-  uri: `${APOLLO_CLIENT_BASE_URL}/api/graphql`,
+  uri: `${process.env.NEXT_PUBLIC_BASE_URL}/api/graphql`,
 });
 
 const defaultOptions: DefaultOptions = {
