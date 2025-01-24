@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   try {
     let result;
 
-    if (query.trim().starsWith("mutation")) {
+    if (query.trim().startsWith("mutation")) {
       result = await apolloServerClient.mutate({
         mutation: gql`
           ${query}
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    if (query.trim().starsWith("query")) {
+    if (query.trim().startsWith("query")) {
       result = await apolloServerClient.query({
         query: gql`
           ${query}
@@ -31,6 +31,8 @@ export async function POST(req: NextRequest) {
         variables,
       });
     }
+
+    console.log("result: ", result);
 
     const data = result?.data;
 
