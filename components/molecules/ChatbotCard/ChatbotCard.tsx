@@ -33,10 +33,12 @@ export const ChatbotCard: FC<Readonly<ChatbotCardProps>> = (props) => {
         </p>
       </div>
 
-      <div className="flex gap-1 items-center">
+      <div className="flex gap-1">
         <Input value={url} readOnly />
 
         <Button
+          size="sm"
+          className="py-5"
           onClick={() => {
             copyToClipboard(url);
             toast.success("URL copied to clipboard!");
@@ -46,7 +48,7 @@ export const ChatbotCard: FC<Readonly<ChatbotCardProps>> = (props) => {
           <span className="sr-only">Copy chatbot url to clipboard</span>
         </Button>
 
-        <Button asChild>
+        <Button size="sm" className="py-5" asChild>
           <Link href={url} target="_blank">
             <LinkIcon className="w-6 h-6" />
             <span className="sr-only">Go to chatbot url</span>
