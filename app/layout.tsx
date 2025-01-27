@@ -3,6 +3,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 
 import "./globals.css";
 import { ApolloProvider } from "@/providers/ApolloProvider";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,7 +19,11 @@ export default function RootLayout({
     <ApolloProvider>
       <ClerkProvider>
         <html lang="en">
-          <body className={`antialiased min-h-screen flex`}>{children}</body>
+          <body className={`antialiased min-h-screen flex`}>
+            {children}
+
+            <Toaster richColors position="top-center" />
+          </body>
         </html>
       </ClerkProvider>
     </ApolloProvider>
