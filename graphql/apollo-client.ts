@@ -15,16 +15,16 @@ const link = createHttpLink({
 
 const defaultOptions: DefaultOptions = {
   watchQuery: {
-    fetchPolicy: "no-cache",
-    errorPolicy: "all",
+    fetchPolicy: "network-only",
+    // errorPolicy: "all",
   },
   query: {
-    fetchPolicy: "no-cache",
-    errorPolicy: "all",
+    fetchPolicy: "network-only",
+    // errorPolicy: "all",
   },
   mutate: {
-    fetchPolicy: "no-cache",
-    errorPolicy: "all",
+    fetchPolicy: "network-only",
+    // errorPolicy: "all",
   },
 };
 

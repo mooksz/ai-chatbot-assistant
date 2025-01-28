@@ -1,7 +1,7 @@
-import { Avatar } from "@/components/atoms/Avatar/Avatar";
+"use client";
+
 import { ChatbotCard } from "@/components/molecules/ChatbotCard/ChatbotCard";
 import { ChatbotEdit } from "@/components/organisms/ChatbotEdit";
-import { Button } from "@/components/ui/button";
 import { apolloServerClient } from "@/graphql/apollo-server-client";
 import { GET_CHATBOT_BY_ID } from "@/graphql/queries";
 import { getChatbotByIdResponseSchema } from "@/schema/chatbot";
@@ -9,28 +9,26 @@ import {
   GetChatbotByIdRequestVariables,
   GetChatbotByIdResponse,
 } from "@/types/chatbot";
+import { useQuery } from "@apollo/client";
 import { notFound } from "next/navigation";
-import { z } from "zod";
+import { use } from "react";
 
 type PageProps = {
   params: Promise<{ id: string }>;
 };
 
-export default async function Page(props: PageProps) {
+export default function Page(props: PageProps) {
   const { params } = props;
-  const { id } = await params;
+  const { id } = use(params);
 
-  const { data } = await apolloServerClient.query<
+  const { data } = useQuery<
     GetChatbotByIdResponse,
     GetChatbotByIdRequestVariables
-  >({
-    query: GET_CHATBOT_BY_ID,
+  >(GET_CHATBOT_BY_ID, {
     variables: { id },
   });
 
-  if (!data) {
-    notFound();
-  }
+  if (!data) return null;
 
   const parsedData = getChatbotByIdResponseSchema.safeParse(data);
 
@@ -40,7 +38,6 @@ export default async function Page(props: PageProps) {
 
   const chatbot = parsedData.data.chatbots;
 
-  //
   return (
     <div className="px-0 md:p-10 w-full flex flex-wrap items-start">
       <h1 className="font-bold text-4xl">Edit chatbot</h1>

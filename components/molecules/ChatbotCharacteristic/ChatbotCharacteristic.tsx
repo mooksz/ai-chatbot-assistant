@@ -24,7 +24,6 @@ export const ChatbotCharacteristic: FC<Readonly<ChatbotCharacteristicProps>> = (
       refetchQueries: [
         { query: GET_CHATBOT_BY_ID, variables: { id: chatbotId } },
       ],
-      awaitRefetchQueries: true,
     }
   );
 
