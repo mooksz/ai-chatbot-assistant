@@ -16,3 +16,11 @@ export const CREATE_CHATBOT = gql`
     }
   }
 `;
+
+export const DELETE_CHATBOT_CHARACTERISTICS = gql`
+  mutation DeleteChatbotCharacteristics($id: Int!) {
+    deleteChatbot_characteristics(id: $id) {
+      id
+    }
+  }
+`;

@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import { CopyIcon, LinkIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, type FC } from "react";
@@ -10,10 +11,11 @@ import { toast } from "sonner";
 
 type ChatbotCardProps = {
   chatbotId: number;
+  className?: string;
 };
 
 export const ChatbotCard: FC<Readonly<ChatbotCardProps>> = (props) => {
-  const { chatbotId } = props;
+  const { chatbotId, className } = props;
   const [{ error }, copyToClipboard] = useCopyToClipboard();
 
   const url = process.env.NEXT_PUBLIC_BASE_URL + `/chatbot/${chatbotId}`;
@@ -25,7 +27,12 @@ export const ChatbotCard: FC<Readonly<ChatbotCardProps>> = (props) => {
   }, [error]);
 
   return (
-    <div className="md:sticky md:top-5 z-50 sm:max-w-sm ml-auto space-y-2 md:border rounded-b-lg md:rounded-lg bg-blue-500 p-5">
+    <div
+      className={cn(
+        "space-y-2 md:border rounded-lg bg-blue-500 p-5",
+        className
+      )}
+    >
       <div className="text-white">
         <h2 className="font-bold text-lg">Link to chat</h2>
         <p className="italic text-sm">
