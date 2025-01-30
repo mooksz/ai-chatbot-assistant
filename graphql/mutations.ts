@@ -17,6 +17,22 @@ export const CREATE_CHATBOT = gql`
   }
 `;
 
+export const ADD_CHATBOT_CHARACTERISTIC = gql`
+  mutation AddChatbotCharacteristic(
+    $content: String!
+    $created_at: DateTime!
+    $chatbot_id: Int!
+  ) {
+    insertChatbot_characteristics(
+      content: $content
+      created_at: $created_at
+      chatbot_id: $chatbot_id
+    ) {
+      id
+    }
+  }
+`;
+
 export const DELETE_CHATBOT_CHARACTERISTICS = gql`
   mutation DeleteChatbotCharacteristics($id: Int!) {
     deleteChatbot_characteristics(id: $id) {

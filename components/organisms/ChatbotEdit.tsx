@@ -1,15 +1,19 @@
 "use client";
 
-import { useEffect, useState, type FC } from "react";
+import { FormEvent, useEffect, useState, type FC } from "react";
 import { Avatar } from "../atoms/Avatar/Avatar";
 import { Button } from "../ui/button";
 import { Chatbot } from "@/types/chatbot";
 import { Input } from "../ui/input";
 import { useMutation } from "@apollo/client";
 import { ChatbotCharacteristic } from "../molecules/ChatbotCharacteristic/ChatbotCharacteristic";
-import { DELETE_CHATBOT } from "@/graphql/mutations";
+import {
+  ADD_CHATBOT_CHARACTERISTIC,
+  DELETE_CHATBOT,
+} from "@/graphql/mutations";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { GET_CHATBOT_BY_ID } from "@/graphql/queries";
 
 type ChatbotEditProps = {
   chatbot: Chatbot;
@@ -23,6 +27,13 @@ export const ChatbotEdit: FC<Readonly<ChatbotEditProps>> = (props) => {
 
   const [deleteChatbot, { loading: deletingChatbot }] =
     useMutation(DELETE_CHATBOT);
+  const [addChatbotCharacteristic, { loading: addingChatbotCharacteristic }] =
+    useMutation(ADD_CHATBOT_CHARACTERISTIC, {
+      refetchQueries: [
+        { query: GET_CHATBOT_BY_ID, variables: { id: chatbot.id } },
+      ],
+      awaitRefetchQueries: true,
+    });
 
   useEffect(() => {
     setChatbotName(chatbot.name);
@@ -52,7 +63,25 @@ export const ChatbotEdit: FC<Readonly<ChatbotEditProps>> = (props) => {
     });
   };
   const onSubmitNameForm = () => {};
-  const onSubmitAddCharacteristicForm = () => {};
+
+  const onSubmitAddCharacteristicForm = async (e: FormEvent) => {
+    e.preventDefault();
+
+    try {
+      await addChatbotCharacteristic({
+        variables: {
+          content: characteristic,
+          created_at: new Date().toISOString(),
+          chatbot_id: chatbot.id,
+        },
+      });
+
+      toast.success("Successfully added chatbot characteristic");
+      setCharacteristic("");
+    } catch {
+      toast.error("Failed to add chatbot characteristic");
+    }
+  };
 
   return (
     <section className="mt-5 bg-white p-5 md:-10 rounded-lg w-full">
@@ -100,8 +129,11 @@ export const ChatbotEdit: FC<Readonly<ChatbotEditProps>> = (props) => {
           required
           onChange={(e) => setCharacteristic(e.target.value)}
         />
-        <Button type="submit" disabled={!characteristic}>
-          Add
+        <Button
+          type="submit"
+          disabled={!characteristic || addingChatbotCharacteristic}
+        >
+          {addingChatbotCharacteristic ? "Adding..." : "Add"}
         </Button>
       </form>
 

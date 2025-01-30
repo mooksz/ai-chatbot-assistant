@@ -28,7 +28,7 @@ export const ChatbotCharacteristic: FC<Readonly<ChatbotCharacteristicProps>> = (
     }
   );
 
-  const onClickDeleteButton = async () => {
+  const onClickDeleteButton = () => {
     const promise = deleteCharacteristic({
       variables: {
         id: characteristicId,
