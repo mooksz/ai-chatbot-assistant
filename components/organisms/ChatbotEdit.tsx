@@ -5,15 +5,10 @@ import { Avatar } from "../atoms/Avatar/Avatar";
 import { Button } from "../ui/button";
 import { Chatbot } from "@/types/chatbot";
 import { Input } from "../ui/input";
-import { useMutation } from "@apollo/client";
 import { ChatbotCharacteristic } from "../molecules/ChatbotCharacteristic/ChatbotCharacteristic";
-import {
-  ADD_CHATBOT_CHARACTERISTIC,
-  DELETE_CHATBOT,
-} from "@/graphql/mutations";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { GET_CHATBOT_BY_ID } from "@/graphql/queries";
+import { useEditChatbot } from "@/hooks/useEditChatbot";
 
 type ChatbotEditProps = {
   chatbot: Chatbot;
@@ -24,16 +19,14 @@ export const ChatbotEdit: FC<Readonly<ChatbotEditProps>> = (props) => {
   const [chatbotName, setChatbotName] = useState("");
   const [characteristic, setCharacteristic] = useState("");
   const router = useRouter();
-
-  const [deleteChatbot, { loading: deletingChatbot }] =
-    useMutation(DELETE_CHATBOT);
-  const [addChatbotCharacteristic, { loading: addingChatbotCharacteristic }] =
-    useMutation(ADD_CHATBOT_CHARACTERISTIC, {
-      refetchQueries: [
-        { query: GET_CHATBOT_BY_ID, variables: { id: chatbot.id } },
-      ],
-      awaitRefetchQueries: true,
-    });
+  const {
+    deleteChatbot,
+    deletingChatbot,
+    addChatbotCharacteristic,
+    addingChatbotCharacteristic,
+    updateChatbotName,
+    updatingChatbotName,
+  } = useEditChatbot(chatbot.id);
 
   useEffect(() => {
     setChatbotName(chatbot.name);
@@ -62,7 +55,23 @@ export const ChatbotEdit: FC<Readonly<ChatbotEditProps>> = (props) => {
       router.push("/view-chatbots");
     });
   };
-  const onSubmitNameForm = () => {};
+
+  const onSubmitUpdateNameForm = async (e: FormEvent) => {
+    e.preventDefault();
+
+    try {
+      await updateChatbotName({
+        variables: {
+          name: chatbotName,
+          id: chatbot.id,
+        },
+      });
+
+      toast.success("Successfully updated chatbot name");
+    } catch {
+      toast.error("Failed to update chatbot name");
+    }
+  };
 
   const onSubmitAddCharacteristicForm = async (e: FormEvent) => {
     e.preventDefault();
@@ -91,14 +100,16 @@ export const ChatbotEdit: FC<Readonly<ChatbotEditProps>> = (props) => {
           seed={`chatbot-${chatbot.id}`}
         />
 
-        <form onSubmit={onSubmitNameForm} className="flex gap-2 w-full">
+        <form onSubmit={onSubmitUpdateNameForm} className="flex gap-2 w-full">
           <Input
-            placeholder={chatbot.name}
+            placeholder="Chatbot name"
             value={chatbotName}
             required
             onChange={(e) => setChatbotName(e.target.value)}
           />
-          <Button disabled={!chatbotName}>Update</Button>
+          <Button type="submit" disabled={!chatbotName || updatingChatbotName}>
+            {updatingChatbotName ? "Updating..." : "Update"}
+          </Button>
         </form>
 
         <Button
