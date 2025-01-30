@@ -35,7 +35,7 @@ export const ChatbotCharacteristic: FC<Readonly<ChatbotCharacteristicProps>> = (
     });
 
     toast.promise(promise, {
-      loading: "Removing",
+      loading: "Removing...",
       success: "Characteristic removed",
       error: "Failed to remove characteristic",
     });
