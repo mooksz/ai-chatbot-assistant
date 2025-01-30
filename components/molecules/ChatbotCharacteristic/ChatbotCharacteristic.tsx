@@ -28,17 +28,17 @@ export const ChatbotCharacteristic: FC<Readonly<ChatbotCharacteristicProps>> = (
   );
 
   const onClickDeleteButton = async () => {
-    try {
-      await deleteCharacteristic({
-        variables: {
-          id: characteristicId,
-        },
-      });
+    const promise = deleteCharacteristic({
+      variables: {
+        id: characteristicId,
+      },
+    });
 
-      toast.success("Deleted characteristic");
-    } catch (error) {
-      toast.error("Failed to delete characteristic");
-    }
+    toast.promise(promise, {
+      loading: "Removing",
+      success: "Characteristic removed",
+      error: "Failed to remove characteristic",
+    });
   };
 
   return (
