@@ -7,6 +7,9 @@ import { Chatbot } from "@/types/chatbot";
 import { Input } from "../ui/input";
 import { useMutation } from "@apollo/client";
 import { ChatbotCharacteristic } from "../molecules/ChatbotCharacteristic/ChatbotCharacteristic";
+import { DELETE_CHATBOT } from "@/graphql/mutations";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type ChatbotEditProps = {
   chatbot: Chatbot;
@@ -16,13 +19,38 @@ export const ChatbotEdit: FC<Readonly<ChatbotEditProps>> = (props) => {
   const { chatbot } = props;
   const [chatbotName, setChatbotName] = useState("");
   const [characteristic, setCharacteristic] = useState("");
+  const router = useRouter();
 
-  // const [mutateName] = useMutation();
+  const [deleteChatbot, { loading: deletingChatbot }] =
+    useMutation(DELETE_CHATBOT);
 
   useEffect(() => {
     setChatbotName(chatbot.name);
   }, [chatbot.name]);
 
+  const onClickDeleteChatbotButton = () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this chatbot?"
+    );
+
+    if (!confirmed) return;
+
+    const promise = deleteChatbot({
+      variables: {
+        id: chatbot.id,
+      },
+    });
+
+    toast.promise(promise, {
+      loading: "Deleting chatbot...",
+      success: "Chatbot deleted",
+      error: "Failed to delete chatbot",
+    });
+
+    promise.then(() => {
+      router.push("/view-chatbots");
+    });
+  };
   const onSubmitNameForm = () => {};
   const onSubmitAddCharacteristicForm = () => {};
 
@@ -44,8 +72,13 @@ export const ChatbotEdit: FC<Readonly<ChatbotEditProps>> = (props) => {
           <Button disabled={!chatbotName}>Update</Button>
         </form>
 
-        <Button type="submit" variant="destructive">
-          X
+        <Button
+          onClick={onClickDeleteChatbotButton}
+          type="submit"
+          variant="destructive"
+          disabled={deletingChatbot}
+        >
+          {deletingChatbot ? "Deleting chatbot" : "Delete chatbot"}
         </Button>
       </div>
 

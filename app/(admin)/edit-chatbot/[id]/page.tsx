@@ -1,8 +1,8 @@
 "use client";
 
 import { ChatbotCard } from "@/components/molecules/ChatbotCard/ChatbotCard";
+import { Loader } from "@/components/molecules/Loader/Loader";
 import { ChatbotEdit } from "@/components/organisms/ChatbotEdit";
-import { apolloServerClient } from "@/graphql/apollo-server-client";
 import { GET_CHATBOT_BY_ID } from "@/graphql/queries";
 import { getChatbotByIdResponseSchema } from "@/schema/chatbot";
 import {
@@ -10,7 +10,6 @@ import {
   GetChatbotByIdResponse,
 } from "@/types/chatbot";
 import { useQuery } from "@apollo/client";
-import { notFound } from "next/navigation";
 import { use } from "react";
 
 type PageProps = {
@@ -21,12 +20,14 @@ export default function Page(props: PageProps) {
   const { params } = props;
   const { id } = use(params);
 
-  const { data } = useQuery<
+  const { data, loading } = useQuery<
     GetChatbotByIdResponse,
     GetChatbotByIdRequestVariables
   >(GET_CHATBOT_BY_ID, {
     variables: { id },
   });
+
+  if (loading) return <Loader />;
 
   if (!data) return null;
 
