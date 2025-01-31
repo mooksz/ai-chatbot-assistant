@@ -1,11 +1,14 @@
 import { Header } from "@/components/molecules/Header/Header";
 import { Sidebar } from "@/components/molecules/Sidebar/Sidebar";
+import { auth } from "@clerk/nextjs/server";
 
 export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  auth.protect();
+
   return (
     <div className="flex flex-col flex-1">
       <Header />
