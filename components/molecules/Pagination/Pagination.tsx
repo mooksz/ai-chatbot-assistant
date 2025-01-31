@@ -14,10 +14,12 @@ import { usePathname, useSearchParams } from "next/navigation";
 type PaginationProps = {
   pageSize: number;
   totalItems: number;
+  className?: string;
 };
 
+/** WOULDDO: Do a summary, handle single buttons etc */
 export function Pagination(props: Readonly<PaginationProps>) {
-  const { pageSize, totalItems } = props;
+  const { pageSize, totalItems, className } = props;
   const pathName = usePathname();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
@@ -27,7 +29,7 @@ export function Pagination(props: Readonly<PaginationProps>) {
 
   const prevLink = currentPage > 1 ? `${pathName}?page=${prevPage}` : null;
   const nextLink =
-    nextPage < totalPages ? `${pathName}?page=${nextPage}` : null;
+    nextPage <= totalPages ? `${pathName}?page=${nextPage}` : null;
 
   /**
    * Pushes pages into an array; they must be within the range of totalPages.
@@ -45,7 +47,7 @@ export function Pagination(props: Readonly<PaginationProps>) {
   }
 
   return (
-    <PaginationWrapper>
+    <PaginationWrapper className={className}>
       <PaginationContent>
         {prevLink && (
           <PaginationItem>
