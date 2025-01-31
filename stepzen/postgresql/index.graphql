@@ -178,7 +178,7 @@ type Query {
       type: "postgresql"
       schema: "public"
       query: """
-      SELECT "clerk_user_id", "created_at", "id", "name" FROM "chatbots" WHERE "clerk_user_id" = $1 ORDER BY "id" LIMIT $2 OFFSET $3
+      SELECT "clerk_user_id", "created_at", "id", "name" FROM "chatbots" WHERE "clerk_user_id" = $1 ORDER BY "created_at" DESC LIMIT $2 OFFSET $3
       """
       configuration: "postgresql_config"
     )
