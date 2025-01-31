@@ -1,3 +1,9 @@
-export default function Page() {
-  return <div>View chatbots</div>;
+import { ViewChatbots } from "@/components/organisms/ViewChatbots/ViewChatbots";
+
+export default async function Page() {
+  return (
+    <div>
+      <ViewChatbots />
+    </div>
+  );
 }
