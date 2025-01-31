@@ -2,7 +2,7 @@
 
 import { ChatbotCard } from "@/components/molecules/ChatbotCard/ChatbotCard";
 import { Loader } from "@/components/molecules/Loader/Loader";
-import { ChatbotEdit } from "@/components/organisms/ChatbotEdit";
+import { ChatbotEdit } from "@/components/organisms/ChatbotEdit/ChatbotEdit";
 import { GET_CHATBOT_BY_ID } from "@/graphql/queries";
 import { getChatbotByIdResponseSchema } from "@/schema/chatbot";
 import {

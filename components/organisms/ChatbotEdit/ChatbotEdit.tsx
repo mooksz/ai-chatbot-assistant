@@ -1,11 +1,11 @@
 "use client";
 
 import { FormEvent, useEffect, useState, type FC } from "react";
-import { Avatar } from "../atoms/Avatar/Avatar";
-import { Button } from "../ui/button";
+import { Avatar } from "@/components/atoms/Avatar/Avatar";
+import { Button } from "@/components/ui/button";
 import { Chatbot } from "@/types/chatbot";
-import { Input } from "../ui/input";
-import { ChatbotCharacteristic } from "../molecules/ChatbotCharacteristic/ChatbotCharacteristic";
+import { Input } from "@/components/ui/input";
+import { ChatbotCharacteristic } from "@/components/molecules/ChatbotCharacteristic/ChatbotCharacteristic";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useEditChatbot } from "@/hooks/useEditChatbot";
