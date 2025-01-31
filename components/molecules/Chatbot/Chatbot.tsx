@@ -7,7 +7,8 @@ import Link from "next/link";
 type ChatbotProps = ChatbotType;
 
 export const Chatbot: FC<Readonly<ChatbotProps>> = (props) => {
-  const { name, id, created_at, chatbot_characteristics } = props;
+  const { name, id, created_at, chatbot_characteristics, chat_sessions } =
+    props;
 
   const date = useMemo(() => {
     return (
@@ -19,11 +20,14 @@ export const Chatbot: FC<Readonly<ChatbotProps>> = (props) => {
 
   return (
     <div className="rounded-lg bg-white border p-5">
-      <div className="flex items-center gap-3">
+      <div className="flex items-start gap-3">
         <Avatar className="w-12 h-12 relative" seed={`chatbot-${id}`} />
         <div>
           <h2 className="font-bold text-xl">{name}</h2>
-          <p className="text-sm text-gray-500">Created: {date}</p>
+          <p className="text-sm text-gray-500">
+            Created: {date} <br />
+            Sessions: {chat_sessions?.length || 0}
+          </p>
         </div>
 
         <Button asChild className="ml-auto">
@@ -31,20 +35,28 @@ export const Chatbot: FC<Readonly<ChatbotProps>> = (props) => {
         </Button>
       </div>
 
-      {!!chatbot_characteristics?.length && (
-        <>
-          <hr className="my-5" />
+      <hr className="my-5" />
 
-          <div>
-            <h3 className="font-bold">Characteristics</h3>
-            <ul>
+      <div className="flex gap-4 items-start">
+        <div>
+          <h3 className="font-bold">Characteristics</h3>
+          {!chatbot_characteristics?.length && (
+            <p>No chatbot characteristics yet</p>
+          )}
+
+          {!!chatbot_characteristics?.length && (
+            <ul className="list-disc pl-4">
               {chatbot_characteristics.map((c) => (
                 <li key={c.id}>{c.content}</li>
               ))}
             </ul>
-          </div>
-        </>
-      )}
+          )}
+        </div>
+
+        <Button asChild className="ml-auto mt-3" variant={"secondary"}>
+          <Link href={`/edit-chatbot/${id}`}>Add chatbot characteristics</Link>
+        </Button>
+      </div>
     </div>
   );
 };
