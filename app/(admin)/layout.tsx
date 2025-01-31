@@ -1,13 +1,15 @@
 import { Header } from "@/components/molecules/Header/Header";
+import { Loader } from "@/components/molecules/Loader/Loader";
 import { Sidebar } from "@/components/molecules/Sidebar/Sidebar";
 import { auth } from "@clerk/nextjs/server";
+import { Suspense } from "react";
 
-export default function Layout({
+export default async function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  auth.protect();
+  await auth.protect();
 
   return (
     <div className="flex flex-col flex-1">
@@ -17,7 +19,7 @@ export default function Layout({
         <Sidebar />
 
         <div className="flex flex-1 justify-center lg:justify-start items-start max-w-5xl mx-auto w-full">
-          {children}
+          <Suspense fallback={<Loader />}>{children}</Suspense>
         </div>
       </div>
     </div>

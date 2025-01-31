@@ -54,7 +54,7 @@ export const Chatbot: FC<Readonly<ChatbotProps>> = (props) => {
         </div>
 
         <Button asChild className="ml-auto mt-3" variant={"secondary"}>
-          <Link href={`/edit-chatbot/${id}`}>Add chatbot characteristics</Link>
+          <Link href={`/edit-chatbot/${id}`}>Edit chatbot characteristics</Link>
         </Button>
       </div>
     </div>
