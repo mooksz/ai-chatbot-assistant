@@ -49,6 +49,10 @@ export const GET_PAGINATED_CHATBOTS_BY_USER_ID = gql`
         id
         chatbot_id
         guest_id
+        guests {
+          name
+          email
+        }
       }
     }
     chatbotsPaginatedListByUserIdPaginationInfo(

@@ -37,7 +37,7 @@ export const Sidebar: FC<SidebarProps> = (props) => {
         <li className="flex-1">
           <Link
             className="hover:opacity-50 flex flex-col text-center lg:text-left lg:flex-row items-center gap-2 p-5 rounded-md bg-blue-500"
-            href="/review-sessions"
+            href="/review-chat-sessions"
           >
             <SearchIcon className="h-6 w-6" />
             <div className="hidden md:ml-2 md:inline">

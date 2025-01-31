@@ -37,7 +37,7 @@ export const PageSizeSelect: FC<Readonly<PageSizeSelectProps>> = (props) => {
       defaultValue={defaultPageSize.toString()}
       onValueChange={onValueChange}
     >
-      <SelectTrigger>
+      <SelectTrigger className="w-auto min-w-[8rem]">
         <SelectValue placeholder="Select page size" />
       </SelectTrigger>
       <SelectContent>

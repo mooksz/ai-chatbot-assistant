@@ -7,6 +7,8 @@ import { Chatbot as ChatbotType } from "@/types/chatbot";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { PageSizeSelect } from "@/components/molecules/PageSizeSelect/PageSizeSelect";
+import { ChatbotSessionsAccordion } from "@/components/molecules/ChatbotSessionsAccordion/ChatbotSessionsAccordion";
+import { Accordion } from "@/components/ui/accordion";
 
 type PageProps = {
   searchParams: Promise<{
@@ -40,6 +42,8 @@ export default async function Page(props: PageProps) {
     },
   });
 
+  console.log(data);
+
   return (
     <div className="flex-1 pb-20 p-10">
       <div className="flex gap-4 items-start justify-between">
@@ -60,12 +64,16 @@ export default async function Page(props: PageProps) {
         </div>
       )}
 
-      <div className="flex flex-col gap-4">
+      <Accordion
+        collapsible
+        type="single"
+        className="bg-white rounded-lg overflow-hidden"
+      >
         {data?.chatbotsPaginatedListByUserId?.length !== 0 &&
           data?.chatbotsPaginatedListByUserId?.map((chatbot: ChatbotType) => (
-            <Chatbot key={chatbot.id} {...chatbot} />
+            <ChatbotSessionsAccordion key={chatbot.id} {...chatbot} />
           ))}
-      </div>
+      </Accordion>
 
       <Pagination
         className={"mt-5"}
