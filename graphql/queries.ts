@@ -26,3 +26,31 @@ export const GET_CHATBOT_BY_ID = gql`
     }
   }
 `;
+
+export const GET_PAGINATED_CHATBOTS_BY_USER_ID = gql`
+  query GetPaginatedChatbotsByUserId(
+    $clerk_user_id: String!
+    $page_size: Int!
+    $page: Int!
+  ) {
+    chatbotsPaginatedListByUserId(
+      clerk_user_id: $clerk_user_id
+      page_size: $page_size
+      page: $page
+    ) {
+      name
+      id
+      created_at
+    }
+    chatbotsPaginatedListByUserIdPaginationInfo(
+      clerk_user_id: $clerk_user_id
+      page_size: $page_size
+      page: $page
+    ) {
+      total
+      items_per_page
+      total_pages
+      page_number
+    }
+  }
+`;

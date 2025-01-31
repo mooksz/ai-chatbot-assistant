@@ -51,6 +51,13 @@ type Messages {
   sender: String!
 }
 
+type PaginationInfo {
+  total: Int!
+  items_per_page: Int!
+  total_pages: Int!
+  page_number: Int!
+}
+
 """
 The following queries are just a set of examples of how to access your schema.
 Feel free to modify them or aggregate more.
@@ -162,12 +169,37 @@ type Query {
       table: "chatbots"
       configuration: "postgresql_config"
     )
-  chatbotsPaginatedList(first: Int, after: Int): [Chatbots]
+  chatbotsPaginatedListByUserId(
+    clerk_user_id: String!
+    page_size: Int!
+    page: Int!
+  ): [Chatbots]
     @dbquery(
       type: "postgresql"
       schema: "public"
       query: """
-      SELECT "clerk_user_id", "created_at", "id", "name" FROM "chatbots" ORDER BY "id" LIMIT $1 OFFSET $2
+      SELECT "clerk_user_id", "created_at", "id", "name" FROM "chatbots" WHERE "clerk_user_id" = $1 ORDER BY "id" LIMIT $2 OFFSET $3
+      """
+      configuration: "postgresql_config"
+    )
+  chatbotsPaginatedListByUserIdPaginationInfo(
+    clerk_user_id: String!
+    page_size: Int!
+    page: Int!
+  ): PaginationInfo
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      WITH total_count AS (
+        SELECT COUNT(*) AS total FROM "chatbots" WHERE "clerk_user_id" = $1
+      )
+      SELECT
+        total_count.total AS total,
+        CAST($2 AS INT) AS items_per_page,
+        CEIL(total_count.total::DECIMAL / $2) AS total_pages,
+        CAST($3 AS INT) as page_number
+      FROM total_count
       """
       configuration: "postgresql_config"
     )
