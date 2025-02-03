@@ -13,7 +13,7 @@ export const chatSessionSchema = z.object({
   id: z.number(),
   chatbot_id: z.number(),
   guest_id: z.number().nullable(),
-  createed_at: z.string().datetime(),
+  created_at: z.string().datetime(),
   messages: z.array(messageSchema),
   guests: guestSchema,
 });

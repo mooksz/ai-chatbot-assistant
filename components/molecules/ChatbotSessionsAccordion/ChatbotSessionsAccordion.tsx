@@ -15,7 +15,8 @@ import { ChatSession } from "@/types/chat";
 import { Pagination } from "../Pagination/Pagination";
 import { useQuery } from "@apollo/client";
 import { useSearchParams } from "next/navigation";
-import { Loader } from "../Loader/Loader";
+import { Loader } from "@/components/molecules/Loader/Loader";
+import ReactTimeAgo from "react-timeago";
 
 type ChatbotSessionsAccordionProps = Chatbot;
 
@@ -73,10 +74,13 @@ export const ChatbotSessionsAccordion: FC<
                   <h4 className="text-2xl font-bold">
                     Session ID: {chatSession.id}
                   </h4>
-                  <span className="text-sm text-gray-500">
+                  <div className="text-sm">
                     Name: {chatSession.guests.name} - Email:{" "}
                     {chatSession.guests.email}
-                  </span>
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    <ReactTimeAgo date={new Date(chatSession.created_at)} />
+                  </div>
                 </div>
 
                 <Button asChild>
