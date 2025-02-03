@@ -62,7 +62,6 @@ export default async function Page(props: PageProps) {
       )}
 
       <Accordion
-        value="2"
         collapsible
         type="single"
         className="bg-white rounded-lg overflow-hidden"
