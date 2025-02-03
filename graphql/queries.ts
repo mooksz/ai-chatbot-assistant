@@ -81,3 +81,11 @@ export const GET_PAGINATED_CHAT_SESSIONS_BY_CHATBOT_ID = gql`
     }
   }
 `;
+
+export const GET_CHAT_SESSIONS_COUNT_BY_CHATBOT_ID = gql`
+  query GetChatSessionsCountByChatbotId($chatbot_id: Int!) {
+    chat_sessionsCountChatbotId(chatbot_id: $chatbot_id) {
+      total
+    }
+  }
+`;
