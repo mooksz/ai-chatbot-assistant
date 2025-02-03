@@ -1,3 +1,5 @@
+"use client";
+
 import type { FC } from "react";
 import {
   AccordionContent,
@@ -9,27 +11,36 @@ import { Avatar } from "@/components/atoms/Avatar/Avatar";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { GET_PAGINATED_CHAT_SESSIONS_BY_CHATBOT_ID } from "@/graphql/queries";
-import { apolloServerClient } from "@/graphql/apollo-server-client";
 import { ChatSession } from "@/types/chat";
+import { Pagination } from "../Pagination/Pagination";
+import { useQuery } from "@apollo/client";
+import { useSearchParams } from "next/navigation";
+import { Loader } from "../Loader/Loader";
 
 type ChatbotSessionsAccordionProps = Chatbot;
 
 export const ChatbotSessionsAccordion: FC<
   Readonly<ChatbotSessionsAccordionProps>
-> = async (props) => {
+> = (props) => {
   const { id: chatbotId, name } = props;
+  const searchParams = useSearchParams();
+  const pageKey = `chat-session-page-chatbot-${chatbotId}`;
+  const page = searchParams.get(pageKey) ?? 1;
 
   /** WOULDDO: VALIDATE DATA */
-  const { data } = await apolloServerClient.query({
-    query: GET_PAGINATED_CHAT_SESSIONS_BY_CHATBOT_ID,
+  const { data } = useQuery(GET_PAGINATED_CHAT_SESSIONS_BY_CHATBOT_ID, {
     variables: {
       chatbot_id: chatbotId,
-      page: 1,
+      page: page,
       page_size: 1,
     },
   });
 
-  const chatSessions = data?.chat_sessionsPaginatedListByChatbotId;
+  if (!data) return <Loader />;
+
+  const chatSessions = data.chat_sessionsPaginatedListByChatbotId;
+  const paginationInfo =
+    data.chat_sessionsPaginatedListByChatbotIdPaginationInfo;
 
   return (
     <AccordionItem value={chatbotId.toString()}>
@@ -51,27 +62,37 @@ export const ChatbotSessionsAccordion: FC<
           </p>
         )}
 
-        {!!chatSessions.length &&
-          chatSessions.map((chatSession: ChatSession) => (
-            <div
-              key={chatSession.id}
-              className="border-b py-4 flex gap-2 justify-between items-center"
-            >
-              <div>
-                <h4 className="text-2xl font-bold">
-                  Session ID: {chatSession.id}
-                </h4>
-                <span className="text-sm text-gray-500">
-                  Name: {chatSession.guests.name} - Email:{" "}
-                  {chatSession.guests.email}
-                </span>
-              </div>
+        {!!chatSessions.length && (
+          <>
+            {chatSessions.map((chatSession: ChatSession) => (
+              <div
+                key={chatSession.id}
+                className="border-b py-4 flex gap-2 justify-between items-center"
+              >
+                <div>
+                  <h4 className="text-2xl font-bold">
+                    Session ID: {chatSession.id}
+                  </h4>
+                  <span className="text-sm text-gray-500">
+                    Name: {chatSession.guests.name} - Email:{" "}
+                    {chatSession.guests.email}
+                  </span>
+                </div>
 
-              <Button asChild>
-                <Link href="">View session</Link>
-              </Button>
-            </div>
-          ))}
+                <Button asChild>
+                  <Link href="">View session</Link>
+                </Button>
+              </div>
+            ))}
+
+            <Pagination
+              className={"mt-5"}
+              pageSize={1}
+              totalItems={paginationInfo.total}
+              pageKey={pageKey}
+            />
+          </>
+        )}
       </AccordionContent>
     </AccordionItem>
   );

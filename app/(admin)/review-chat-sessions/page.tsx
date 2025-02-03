@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { PageSizeSelect } from "@/components/molecules/PageSizeSelect/PageSizeSelect";
 import { ChatbotSessionsAccordion } from "@/components/molecules/ChatbotSessionsAccordion/ChatbotSessionsAccordion";
 import { Accordion } from "@/components/ui/accordion";
-import { Suspense } from "react";
 
 type PageProps = {
   searchParams: Promise<{
@@ -63,15 +62,14 @@ export default async function Page(props: PageProps) {
       )}
 
       <Accordion
+        value="2"
         collapsible
         type="single"
         className="bg-white rounded-lg overflow-hidden"
       >
         {data?.chatbotsPaginatedListByUserId?.length !== 0 &&
           data?.chatbotsPaginatedListByUserId?.map((chatbot: ChatbotType) => (
-            <Suspense fallback="loading">
-              <ChatbotSessionsAccordion key={chatbot.id} {...chatbot} />
-            </Suspense>
+            <ChatbotSessionsAccordion key={chatbot.id} {...chatbot} />
           ))}
       </Accordion>
 
