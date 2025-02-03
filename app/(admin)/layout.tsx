@@ -2,6 +2,7 @@ import { Header } from "@/components/molecules/Header/Header";
 import { Loader } from "@/components/molecules/Loader/Loader";
 import { Sidebar } from "@/components/molecules/Sidebar/Sidebar";
 import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 export default async function Layout({
@@ -9,7 +10,9 @@ export default async function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  await auth.protect();
+  const { userId } = await auth();
+
+  if (!userId) redirect("/login");
 
   return (
     <div className="flex flex-col flex-1">
