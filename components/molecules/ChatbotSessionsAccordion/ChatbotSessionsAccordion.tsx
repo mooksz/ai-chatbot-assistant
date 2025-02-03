@@ -84,7 +84,9 @@ export const ChatbotSessionsAccordion: FC<
                 </div>
 
                 <Button asChild>
-                  <Link href="">View session</Link>
+                  <Link href={`/review-chat-sessions/${chatSession.id}`}>
+                    View session
+                  </Link>
                 </Button>
               </div>
             ))}
