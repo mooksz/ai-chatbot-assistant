@@ -1,4 +1,3 @@
-import { Chatbot } from "@/components/molecules/Chatbot/Chatbot";
 import { Pagination } from "@/components/molecules/Pagination/Pagination";
 import { apolloServerClient } from "@/graphql/apollo-server-client";
 import { GET_PAGINATED_CHATBOTS_BY_USER_ID } from "@/graphql/queries";
@@ -9,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { PageSizeSelect } from "@/components/molecules/PageSizeSelect/PageSizeSelect";
 import { ChatbotSessionsAccordion } from "@/components/molecules/ChatbotSessionsAccordion/ChatbotSessionsAccordion";
 import { Accordion } from "@/components/ui/accordion";
+import { Suspense } from "react";
 
 type PageProps = {
   searchParams: Promise<{
@@ -18,7 +18,7 @@ type PageProps = {
 };
 
 const PAGE_SIZE_OPTIONS = [3, 5, 10, 25];
-const DEFAULT_PAGE_SIZE = PAGE_SIZE_OPTIONS[0];
+const DEFAULT_PAGE_SIZE = PAGE_SIZE_OPTIONS[2];
 
 export default async function Page(props: PageProps) {
   const { searchParams } = props;
@@ -41,8 +41,6 @@ export default async function Page(props: PageProps) {
       page_size,
     },
   });
-
-  console.log(data);
 
   return (
     <div className="flex-1 pb-20 p-10">
@@ -71,7 +69,9 @@ export default async function Page(props: PageProps) {
       >
         {data?.chatbotsPaginatedListByUserId?.length !== 0 &&
           data?.chatbotsPaginatedListByUserId?.map((chatbot: ChatbotType) => (
-            <ChatbotSessionsAccordion key={chatbot.id} {...chatbot} />
+            <Suspense fallback="loading">
+              <ChatbotSessionsAccordion key={chatbot.id} {...chatbot} />
+            </Suspense>
           ))}
       </Accordion>
 

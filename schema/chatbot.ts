@@ -14,7 +14,6 @@ export const chatbotSchema = z.object({
   name: z.string(),
   created_at: z.string().datetime(),
   chatbot_characteristics: z.array(chatbotCharacteristicsSchema),
-  chat_sessions: z.array(chatSessionSchema),
 });
 
 export const getChatbotByIdResponseSchema = z.object({

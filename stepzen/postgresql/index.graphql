@@ -20,8 +20,8 @@ type Chatbot_characteristics {
 }
 
 type Chatbots {
-  chat_sessions: [Chat_sessions]
-    @materializer(query: "chat_sessionsUsingChat_sessions_chatbot_id_fkey")
+  # chat_sessions: [Chat_sessions]
+  #   @materializer(query: "chat_sessionsUsingChat_sessions_chatbot_id_fkey")
   chatbot_characteristics: [Chatbot_characteristics]
     @materializer(
       query: "chatbot_characteristicsUsingChatbot_characteristics_chatbot_id_fkey"
@@ -64,6 +64,40 @@ Feel free to modify them or aggregate more.
 """
 type Query {
   " Queries for type 'Chat_sessions' "
+  chat_sessionsPaginatedListByChatbotId(
+    chatbot_id: Int!
+    page_size: Int!
+    page: Int!
+  ): [Chat_sessions]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "chatbot_id", "created_at", "id", "guest_id" FROM "chat_sessions" WHERE "chatbot_id" = $1 ORDER BY "created_at" DESC LIMIT $2 OFFSET ($3 - 1)
+      """
+      configuration: "postgresql_config"
+    )
+  chat_sessionsPaginatedListByChatbotIdPaginationInfo(
+    chatbot_id: Int!
+    page_size: Int!
+    page: Int!
+  ): PaginationInfo
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      WITH total_count AS (
+        SELECT COUNT(*) AS total FROM "chat_sessions" WHERE "chatbot_id" = $1
+      )
+      SELECT
+        total_count.total AS total,
+        CAST($2 AS INT) AS items_per_page,
+        CEIL(total_count.total::DECIMAL / $2) AS total_pages,
+        CAST($3 AS INT) as page_number
+      FROM total_count
+      """
+      configuration: "postgresql_config"
+    )
   chat_sessions(id: Int!): Chat_sessions
     @dbquery(
       type: "postgresql"
@@ -178,7 +212,7 @@ type Query {
       type: "postgresql"
       schema: "public"
       query: """
-      SELECT "clerk_user_id", "created_at", "id", "name" FROM "chatbots" WHERE "clerk_user_id" = $1 ORDER BY "created_at" DESC LIMIT $2 OFFSET $3
+      SELECT "clerk_user_id", "created_at", "id", "name" FROM "chatbots" WHERE "clerk_user_id" = $1 ORDER BY "created_at" DESC LIMIT $2 OFFSET ($3 - 1)
       """
       configuration: "postgresql_config"
     )

@@ -7,8 +7,7 @@ import Link from "next/link";
 type ChatbotProps = ChatbotType;
 
 export const Chatbot: FC<Readonly<ChatbotProps>> = (props) => {
-  const { name, id, created_at, chatbot_characteristics, chat_sessions } =
-    props;
+  const { name, id, created_at, chatbot_characteristics } = props;
 
   return (
     <div className="rounded-lg bg-white border p-5">
@@ -46,11 +45,8 @@ export const Chatbot: FC<Readonly<ChatbotProps>> = (props) => {
 
       <hr className="mt-5 mb-3" />
 
-      <div className="flex justify-between items-center">
-        <p className="text-sm text-gray-500">
-          Sessions: {chat_sessions?.length || 0}
-        </p>
-        <p className="text-sm text-gray-500">
+      <div className="flex">
+        <p className="ml-auto text-sm text-gray-500">
           Created: {new Date(created_at).toLocaleString("nl-NL")}
         </p>
       </div>
