@@ -89,3 +89,26 @@ export const GET_CHAT_SESSIONS_COUNT_BY_CHATBOT_ID = gql`
     }
   }
 `;
+
+export const GET_CHAT_SESSION_BY_ID = gql`
+  query GetChatSessionById($chat_session_id: Int!) {
+    chat_sessions(id: $chat_session_id) {
+      id
+      created_at
+      messages {
+        id
+        content
+        created_at
+        sender
+      }
+      chatbots {
+        name
+        id
+      }
+      guests {
+        name
+        email
+      }
+    }
+  }
+`;

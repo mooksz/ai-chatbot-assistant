@@ -25,8 +25,8 @@ export default async function Page(props: PageProps) {
     page_size: page_sizeString = DEFAULT_PAGE_SIZE,
   } = await searchParams;
   const { userId } = await auth();
-  const page = Number(pageString);
-  const page_size = Number(page_sizeString);
+  const page = parseInt(pageString);
+  const page_size = parseInt(page_sizeString);
 
   if (!userId) return null;
 

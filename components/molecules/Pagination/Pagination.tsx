@@ -23,7 +23,7 @@ export function Pagination(props: Readonly<PaginationProps>) {
   const { pageSize, totalItems, className, pageKey = "page" } = props;
   const pathName = usePathname();
   const searchParams = useSearchParams();
-  const currentPage = Number(searchParams.get(pageKey)) || 1;
+  const currentPage = parseInt(searchParams.get(pageKey)) || 1;
   const prevPage = currentPage - 1;
   const nextPage = currentPage + 1;
   const totalPages = Math.ceil(totalItems / pageSize);

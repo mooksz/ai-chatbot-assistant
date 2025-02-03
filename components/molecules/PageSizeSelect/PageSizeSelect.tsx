@@ -23,7 +23,7 @@ export const PageSizeSelect: FC<Readonly<PageSizeSelectProps>> = (props) => {
   const router = useRouter();
 
   function onValueChange(pageSizeString: string) {
-    const pageSize = Number(pageSizeString);
+    const pageSize = parseInt(pageSizeString);
 
     const newSearchParams = new URLSearchParams(searchParams);
 
